@@ -1,6 +1,7 @@
 import { analyzeLineCounts } from './countLinesMonorepos';
 import { analyzeDependencies } from './dependencyAnalyzer';
 import { analyzeBuildSizes } from './buildSizeAnalyzer';
+import { analyzeGithubStats } from './githubAnalyzer';
 import * as readline from 'readline';
 
 interface AnalysisOption {
@@ -47,6 +48,11 @@ async function runMonorepoAnalysis(): Promise<void> {
             name: 'Build Size Analysis',
             description: 'Analyze build sizes of packages',
             action: analyzeBuildSizes
+        },
+        {
+            name: 'GitHub Analysis',
+            description: 'Analyze GitHub statistics (stars, watchers, forks, releases)',
+            action: analyzeGithubStats
         }
     ];
 

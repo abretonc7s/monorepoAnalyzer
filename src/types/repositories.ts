@@ -6,6 +6,7 @@ interface PackageConfig {
 interface RepositoryConfig {
   repoName: string;
   baseDirectory: string;
+  githubUrl: string;
   packages: PackageConfig[];
 }
 
@@ -13,6 +14,7 @@ export const repositories: RepositoryConfig[] = [
   {
     repoName: 'Coinbase Wallet SDK',
     baseDirectory: '/Volumes/FD/Projects/coinbase-wallet-sdk',
+    githubUrl: 'https://github.com/coinbase/coinbase-wallet-sdk',
     packages: [
       {
         name: 'wallet-sdk',
@@ -23,11 +25,8 @@ export const repositories: RepositoryConfig[] = [
   {
     repoName: 'MetaMask SDK',
     baseDirectory: '/Volumes/FD/Projects/metamask/metamask-sdk',
+    githubUrl: 'https://github.com/MetaMask/metamask-sdk',
     packages: [
-    //   {
-    //     name: 'sdk-socket-server-next',
-    //     path: 'packages/sdk-socket-server-next'
-    //   },
       {
         name: 'sdk-install-modal-web',
         path: 'packages/sdk-install-modal-web'
@@ -53,6 +52,7 @@ export const repositories: RepositoryConfig[] = [
   {
     repoName: 'WalletConnect',
     baseDirectory: '/Volumes/FD/Projects/walletconnect-monorepo',
+    githubUrl: 'https://github.com/WalletConnect/walletconnect-monorepo',
     packages: [
       {
         name: 'types',
