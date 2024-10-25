@@ -6,6 +6,7 @@ interface GithubStats {
   forks: number;
   releases: number;
   tags: number;
+  contributors: number;
 }
 
 interface GithubAnalysisResult {
@@ -18,9 +19,10 @@ async function fetchGithubStats(githubUrl: string): Promise<GithubStats> {
   const apiUrl = `https://api.github.com/repos/${repoPath}`;
   const releasesUrl = `https://api.github.com/repos/${repoPath}/releases?per_page=1`;
   const tagsUrl = `https://api.github.com/repos/${repoPath}/tags?per_page=1`;
+  const contributorsUrl = `https://api.github.com/repos/${repoPath}/contributors?per_page=1`;
 
   try {
-    const [repoResponse, releasesResponse, tagsResponse] = await Promise.all([
+    const [repoResponse, releasesResponse, tagsResponse, contributorsResponse] = await Promise.all([
       fetch(apiUrl, {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       }),
@@ -29,20 +31,23 @@ async function fetchGithubStats(githubUrl: string): Promise<GithubStats> {
       }),
       fetch(tagsUrl, {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
+      }),
+      fetch(contributorsUrl, {
+        headers: { 'Accept': 'application/vnd.github.v3+json' }
       })
     ]);
 
-    if (!repoResponse.ok || !releasesResponse.ok || !tagsResponse.ok) {
+    if (!repoResponse.ok || !releasesResponse.ok || !tagsResponse.ok || !contributorsResponse.ok) {
       throw new Error(`Failed to fetch GitHub data for ${githubUrl}`);
     }
 
     const repoData = await repoResponse.json();
 
-    // Get total release count from Link header
+    // Get counts from Link headers
     const releasesLink = releasesResponse.headers.get('Link');
     const tagsLink = tagsResponse.headers.get('Link');
+    const contributorsLink = contributorsResponse.headers.get('Link');
 
-    // Parse the last page number from Link header or default to 1
     const releaseCount = releasesLink ?
       parseInt(releasesLink.match(/page=(\d+)>; rel="last"/)?.[1] || '1') :
       1;
@@ -51,12 +56,17 @@ async function fetchGithubStats(githubUrl: string): Promise<GithubStats> {
       parseInt(tagsLink.match(/page=(\d+)>; rel="last"/)?.[1] || '1') :
       1;
 
+    const contributorCount = contributorsLink ?
+      parseInt(contributorsLink.match(/page=(\d+)>; rel="last"/)?.[1] || '1') :
+      1;
+
     return {
       stars: repoData.stargazers_count,
       watchers: repoData.subscribers_count,
       forks: repoData.forks_count,
       releases: releaseCount,
-      tags: tagCount
+      tags: tagCount,
+      contributors: contributorCount
     };
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -68,7 +78,8 @@ async function fetchGithubStats(githubUrl: string): Promise<GithubStats> {
       watchers: 0,
       forks: 0,
       releases: 0,
-      tags: 0
+      tags: 0,
+      contributors: 0
     };
   }
 }
@@ -95,5 +106,6 @@ export async function analyzeGithubStats(): Promise<void> {
     console.log(`Forks: ${result.stats.forks.toLocaleString()}`);
     console.log(`Releases: ${result.stats.releases.toLocaleString()}`);
     console.log(`Tags: ${result.stats.tags.toLocaleString()}`);
+    console.log(`Contributors: ${result.stats.contributors.toLocaleString()}`);
   });
 }
