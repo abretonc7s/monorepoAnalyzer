@@ -1,4 +1,4 @@
-import { repositories } from './types/repositories';
+import { repositories } from "./types/repositories";
 
 interface GithubStats {
   stars: number;
@@ -22,43 +22,49 @@ async function fetchGithubStats(githubUrl: string): Promise<GithubStats> {
   const contributorsUrl = `https://api.github.com/repos/${repoPath}/contributors?per_page=1`;
 
   try {
-    const [repoResponse, releasesResponse, tagsResponse, contributorsResponse] = await Promise.all([
-      fetch(apiUrl, {
-        headers: { 'Accept': 'application/vnd.github.v3+json' }
-      }),
-      fetch(releasesUrl, {
-        headers: { 'Accept': 'application/vnd.github.v3+json' }
-      }),
-      fetch(tagsUrl, {
-        headers: { 'Accept': 'application/vnd.github.v3+json' }
-      }),
-      fetch(contributorsUrl, {
-        headers: { 'Accept': 'application/vnd.github.v3+json' }
-      })
-    ]);
+    const [repoResponse, releasesResponse, tagsResponse, contributorsResponse] =
+      await Promise.all([
+        fetch(apiUrl, {
+          headers: { Accept: "application/vnd.github.v3+json" },
+        }),
+        fetch(releasesUrl, {
+          headers: { Accept: "application/vnd.github.v3+json" },
+        }),
+        fetch(tagsUrl, {
+          headers: { Accept: "application/vnd.github.v3+json" },
+        }),
+        fetch(contributorsUrl, {
+          headers: { Accept: "application/vnd.github.v3+json" },
+        }),
+      ]);
 
-    if (!repoResponse.ok || !releasesResponse.ok || !tagsResponse.ok || !contributorsResponse.ok) {
+    if (
+      !repoResponse.ok ||
+      !releasesResponse.ok ||
+      !tagsResponse.ok ||
+      !contributorsResponse.ok
+    ) {
       throw new Error(`Failed to fetch GitHub data for ${githubUrl}`);
     }
 
     const repoData = await repoResponse.json();
 
     // Get counts from Link headers
-    const releasesLink = releasesResponse.headers.get('Link');
-    const tagsLink = tagsResponse.headers.get('Link');
-    const contributorsLink = contributorsResponse.headers.get('Link');
+    const releasesLink = releasesResponse.headers.get("Link");
+    const tagsLink = tagsResponse.headers.get("Link");
+    const contributorsLink = contributorsResponse.headers.get("Link");
 
-    const releaseCount = releasesLink ?
-      parseInt(releasesLink.match(/page=(\d+)>; rel="last"/)?.[1] || '1') :
-      1;
+    const releaseCount = releasesLink
+      ? parseInt(releasesLink.match(/page=(\d+)>; rel="last"/)?.[1] || "1")
+      : 1;
 
-    const tagCount = tagsLink ?
-      parseInt(tagsLink.match(/page=(\d+)>; rel="last"/)?.[1] || '1') :
-      1;
+    const tagCount = tagsLink
+      ? parseInt(tagsLink.match(/page=(\d+)>; rel="last"/)?.[1] || "1")
+      : 1;
 
-    const contributorCount = contributorsLink ?
-      parseInt(contributorsLink.match(/page=(\d+)>; rel="last"/)?.[1] || '1') :
-      1;
+    const contributorCount = contributorsLink
+      ? parseInt(contributorsLink.match(/page=(\d+)>; rel="last"/)?.[1] || "1")
+      : 1;
 
     return {
       stars: repoData.stargazers_count,
@@ -66,11 +72,13 @@ async function fetchGithubStats(githubUrl: string): Promise<GithubStats> {
       forks: repoData.forks_count,
       releases: releaseCount,
       tags: tagCount,
-      contributors: contributorCount
+      contributors: contributorCount,
     };
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error(`Error fetching GitHub stats for ${githubUrl}: ${error.message}`);
+      console.error(
+        `Error fetching GitHub stats for ${githubUrl}: ${error.message}`,
+      );
     }
 
     return {
@@ -79,7 +87,7 @@ async function fetchGithubStats(githubUrl: string): Promise<GithubStats> {
       forks: 0,
       releases: 0,
       tags: 0,
-      contributors: 0
+      contributors: 0,
     };
   }
 }
@@ -94,12 +102,12 @@ export async function analyzeGithubStats(): Promise<void> {
 
     results.push({
       repoName: repo.repoName,
-      stats
+      stats,
     });
   }
 
-  console.log('\n=== GitHub Statistics ===');
-  results.forEach(result => {
+  console.log("\n=== GitHub Statistics ===");
+  results.forEach((result) => {
     console.log(`\nRepository: ${result.repoName}`);
     console.log(`Stars: ${result.stats.stars.toLocaleString()}`);
     console.log(`Watchers: ${result.stats.watchers.toLocaleString()}`);

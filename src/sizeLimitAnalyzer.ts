@@ -1,7 +1,7 @@
-import { exec } from 'child_process';
-import fs from 'fs-extra';
-import path from 'path';
-import { repositories } from './types/repositories';
+import { exec } from "child_process";
+import fs from "fs-extra";
+import path from "path";
+import { repositories } from "./types/repositories";
 
 interface BuildSize {
   size: number;
@@ -18,7 +18,9 @@ interface SizeResult {
   reactSize?: BuildSize;
 }
 
-async function getFileSize(filePath: string): Promise<{ size: number; gzippedSize: number }> {
+async function getFileSize(
+  filePath: string,
+): Promise<{ size: number; gzippedSize: number }> {
   const content = await fs.readFile(filePath);
   const size = content.length;
 
@@ -29,34 +31,37 @@ async function getFileSize(filePath: string): Promise<{ size: number; gzippedSiz
       } else {
         resolve({
           size: size / 1024, // Convert to KB
-          gzippedSize: parseInt(stdout.trim(), 10) / 1024 // Convert to KB
+          gzippedSize: parseInt(stdout.trim(), 10) / 1024, // Convert to KB
         });
       }
     });
   });
 }
 
-async function findBrowserBuild(packagePath: string): Promise<BuildSize | undefined> {
-  const distPath = path.join(packagePath, 'dist');
+async function findBrowserBuild(
+  packagePath: string,
+): Promise<BuildSize | undefined> {
+  const distPath = path.join(packagePath, "dist");
 
   if (!fs.existsSync(distPath)) return undefined;
 
   const buildPriority = [
-    { pattern: 'browser/es/', format: 'ES Modules' },
-    { pattern: 'browser/umd/', format: 'UMD' },
-    { pattern: 'es/', format: 'ES Modules' },
-    { pattern: 'umd/', format: 'UMD' },
+    { pattern: "browser/es/", format: "ES Modules" },
+    { pattern: "browser/umd/", format: "UMD" },
+    { pattern: "es/", format: "ES Modules" },
+    { pattern: "umd/", format: "UMD" },
   ];
 
   for (const { pattern, format } of buildPriority) {
     const files = await fs.readdir(distPath, { recursive: true });
-    const browserFile = files.find(file =>
-      typeof file === 'string' &&
-      file.endsWith('.js') &&
-      file.includes(pattern)
+    const browserFile = files.find(
+      (file) =>
+        typeof file === "string" &&
+        file.endsWith(".js") &&
+        file.includes(pattern),
     );
 
-    if (browserFile && typeof browserFile === 'string') {
+    if (browserFile && typeof browserFile === "string") {
       const filePath = path.join(distPath, browserFile);
       const { size, gzippedSize } = await getFileSize(filePath);
 
@@ -74,42 +79,42 @@ export async function analyzeSizeLimits(): Promise<void> {
     console.log(`\nAnalyzing ${repo.repoName}...`);
     const result: SizeResult = {
       repoName: repo.repoName,
-      packageName: repo.repoName
+      packageName: repo.repoName,
     };
 
     // Find core SDK package
-    const corePackage = repo.packages.find(pkg =>
-      pkg.name.includes('sdk') ||
-      pkg.name.includes('core') ||
-      pkg.name === 'wallet-sdk'
+    const corePackage = repo.packages.find(
+      (pkg) =>
+        pkg.name.includes("sdk") ||
+        pkg.name.includes("core") ||
+        pkg.name === "wallet-sdk",
     );
 
     if (corePackage) {
       result.coreSdkSize = await findBrowserBuild(
-        path.join(repo.baseDirectory, corePackage.path)
+        path.join(repo.baseDirectory, corePackage.path),
       );
     }
 
     // Find utils package
-    const utilsPackage = repo.packages.find(pkg =>
-      pkg.name.includes('utils') ||
-      pkg.name.includes('communication')
+    const utilsPackage = repo.packages.find(
+      (pkg) => pkg.name.includes("utils") || pkg.name.includes("communication"),
     );
 
     if (utilsPackage) {
       result.utilsSize = await findBrowserBuild(
-        path.join(repo.baseDirectory, utilsPackage.path)
+        path.join(repo.baseDirectory, utilsPackage.path),
       );
     }
 
     // Find React package
-    const reactPackage = repo.packages.find(pkg =>
-      pkg.name.includes('react')
+    const reactPackage = repo.packages.find((pkg) =>
+      pkg.name.includes("react"),
     );
 
     if (reactPackage) {
       result.reactSize = await findBrowserBuild(
-        path.join(repo.baseDirectory, reactPackage.path)
+        path.join(repo.baseDirectory, reactPackage.path),
       );
     }
 
@@ -117,10 +122,10 @@ export async function analyzeSizeLimits(): Promise<void> {
   }
 
   // Print comparison table
-  console.log('\n=== SDK Size Comparison (Browser Builds) ===\n');
+  console.log("\n=== SDK Size Comparison (Browser Builds) ===\n");
 
-  console.log('Core SDK Sizes:');
-  results.forEach(result => {
+  console.log("Core SDK Sizes:");
+  results.forEach((result) => {
     if (result.coreSdkSize) {
       console.log(`\n${result.repoName}:`);
       console.log(`  Format: ${result.coreSdkSize.format}`);

@@ -1,7 +1,7 @@
-import fs from 'fs';
-import { globSync } from 'glob';
-import path from 'path';
-import { repositories } from './types/repositories';
+import fs from "fs";
+import { globSync } from "glob";
+import path from "path";
+import { repositories } from "./types/repositories";
 
 interface CountLinesParams {
   directories: string[];
@@ -10,7 +10,12 @@ interface CountLinesParams {
   repoName: string;
 }
 
-function countLinesInRepo({ directories, filePatterns, testFilePatterns, repoName }: CountLinesParams) {
+function countLinesInRepo({
+  directories,
+  filePatterns,
+  testFilePatterns,
+  repoName,
+}: CountLinesParams) {
   const result = {
     totalLines: 0,
     testLines: 0,
@@ -34,8 +39,10 @@ function countLinesInRepo({ directories, filePatterns, testFilePatterns, repoNam
           return;
         }
 
-        const isTestFile = testFilePatterns.some((testPattern) => file.includes(testPattern));
-        const lines = fs.readFileSync(file, 'utf-8').split('\n').length;
+        const isTestFile = testFilePatterns.some((testPattern) =>
+          file.includes(testPattern),
+        );
+        const lines = fs.readFileSync(file, "utf-8").split("\n").length;
 
         result.totalLines += lines;
 
@@ -52,7 +59,7 @@ function countLinesInRepo({ directories, filePatterns, testFilePatterns, repoNam
   console.log(`Total lines: ${result.totalLines}`);
   console.log(`Test lines: ${result.testLines}`);
   console.log(`Non-test lines: ${result.nonTestLines}`);
-  console.log('-------------------------------------');
+  console.log("-------------------------------------");
 
   return result;
 }
@@ -66,7 +73,7 @@ interface RepoSummary {
 }
 
 export function analyzeLineCounts() {
-  const testFilePatterns = ['.test.', '.spec.', '__tests__'];
+  const testFilePatterns = [".test.", ".spec.", "__tests__"];
   const repoSummaries = new Map<string, RepoSummary>();
 
   repositories.forEach((repo) => {
@@ -82,7 +89,7 @@ export function analyzeLineCounts() {
       const fullPath = path.join(repo.baseDirectory, pkg.path);
       const result = countLinesInRepo({
         directories: [fullPath],
-        filePatterns: ['src/**/*.{ts,tsx}'],
+        filePatterns: ["src/**/*.{ts,tsx}"],
         testFilePatterns,
         repoName: `${repo.repoName}/${pkg.name}`,
       });
@@ -97,13 +104,15 @@ export function analyzeLineCounts() {
   });
 
   // Print repository summaries
-  console.log('\n=== Repository Summaries ===');
+  console.log("\n=== Repository Summaries ===");
   repoSummaries.forEach((summary) => {
     console.log(`\nRepository: ${summary.repoName}`);
     console.log(`Number of packages: ${summary.packages}`);
     console.log(`Total lines: ${summary.totalLines}`);
     console.log(`Test lines: ${summary.testLines}`);
     console.log(`Non-test lines: ${summary.nonTestLines}`);
-    console.log(`Test/Total ratio: ${((summary.testLines / summary.totalLines) * 100).toFixed(1)}%`);
+    console.log(
+      `Test/Total ratio: ${((summary.testLines / summary.totalLines) * 100).toFixed(1)}%`,
+    );
   });
 }
