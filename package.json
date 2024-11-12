@@ -12,7 +12,9 @@
     "analyze-all": "node analyze.mjs",
     "clean": "rm -rf dist stats optimization-report.html",
     "predeploy": "yarn analyze-all",
-    "deploy": "gh-pages -d . -f --src '{index.html,optimization-report.html,stats/**/*,dist/**/*}'"
+    "deploy": "gh-pages -d . -f --src '{index.html,optimization-report.html,stats/**/*,dist/**/*}'",
+    "serve": "serve .",
+    "preview": "yarn analyze-all && serve ."
   },
   "dependencies": {
     "@coinbase/wallet-sdk": "^4.2.2",
@@ -53,6 +55,7 @@
     "react-dom": "^18.3.1",
     "rollup": "^4.25.0",
     "rollup-plugin-visualizer": "^5.0.0",
+    "serve": "^14.2.1",
     "size-limit": "^11.1.6",
     "typescript-eslint": "^8.11.0"
   }
