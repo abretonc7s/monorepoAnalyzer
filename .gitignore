@@ -2,3 +2,4 @@
 node_modules/
 install-state.gz
 dist/
+.gh-pages-cache
