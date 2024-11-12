@@ -997,6 +997,9 @@ function generateReportStyles() {
 }
 
 function generateVersionInfo(versions) {
+  // Find standard level results from the most recent build
+  const standardResults = history[history.length - 1]?.results?.standard || [];
+
   return `
     <div class="version-info">
       <h2>Current SDK Versions</h2>
@@ -1004,16 +1007,20 @@ function generateVersionInfo(versions) {
         <tr>
           <th>SDK</th>
           <th>Version</th>
+          <th>Standard Build Size (Brotli)</th>
         </tr>
         ${Object.entries(versions)
-          .map(
-            ([sdk, version]) => `
-            <tr>
-              <td>${sdk}</td>
-              <td>${version}</td>
-            </tr>
-          `
-          )
+          .map(([sdk, version]) => {
+            const sdkResult = standardResults.find((r) => r.sdk === sdk);
+            const size = sdkResult ? formatBytes(sdkResult.brotli) : "N/A";
+            return `
+                <tr>
+                  <td>${sdk}</td>
+                  <td>${version}</td>
+                  <td class="size-cell">${size}</td>
+                </tr>
+              `;
+          })
           .join("")}
       </table>
     </div>
