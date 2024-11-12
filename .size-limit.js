@@ -1,3 +1,4 @@
+// .size-limit.js
 const coinbaseWebpackConfig = (config) => ({
   ...config,
   resolve: {
