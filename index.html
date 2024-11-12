@@ -123,6 +123,23 @@
         document.querySelector('.report-section a').href =
             isLocalFile ? 'optimization-report.html' : `${baseUrl}/optimization-report.html`;
 
+        // Add timestamps for the reports
+        async function updateTimestamps() {
+            try {
+                if (isGitHubPages) {
+                    const response = await fetch('https://api.github.com/repos/abretonc7s/monorepoAnalyzer/commits?path=optimization-report.html&page=1&per_page=1');
+                    const [lastCommit] = await response.json();
+                    if (lastCommit) {
+                        const date = new Date(lastCommit.commit.author.date);
+                        document.getElementById('optimization-timestamp').textContent =
+                            `Updated: ${date.toLocaleDateString()}`;
+                    }
+                }
+            } catch (error) {
+                console.log('Could not fetch timestamps:', error);
+            }
+        }
+
         // Load and display available statistics
         async function loadStats() {
             try {
@@ -182,6 +199,7 @@
             }
         }
 
+        // Initialize everything
         updateTimestamps();
         loadStats();
     </script>
