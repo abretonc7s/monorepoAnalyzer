@@ -1,5 +1,5 @@
 .env
 node_modules/
 install-state.gz
-dist/
 .gh-pages-cache
+# do not include dist/ as we want to avoid recomputing each verison
