@@ -1,8 +1,8 @@
 import { analyzeLineCounts } from './countLinesMonorepos';
 import { analyzeDependencies } from './dependencyAnalyzer';
-import { analyzeBuildSizes } from './buildSizeAnalyzer';
 import { analyzeGithubStats } from './githubAnalyzer';
 import * as readline from 'readline';
+import { analyzeSizeLimits } from './sizeLimitAnalyzer';
 
 interface AnalysisOption {
     name: string;
@@ -45,9 +45,9 @@ async function runMonorepoAnalysis(): Promise<void> {
             action: analyzeDependencies
         },
         {
-            name: 'Build Size Analysis',
-            description: 'Analyze build sizes of packages',
-            action: analyzeBuildSizes
+            name: 'Size Analysis',
+            description: 'Analyze built package sizes and compare across repositories',
+            action: analyzeSizeLimits
         },
         {
             name: 'GitHub Analysis',
