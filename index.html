@@ -132,49 +132,67 @@
         }
 
         // Load and display available statistics
+        // Load and display available statistics
         async function loadStats() {
             try {
                 let data;
                 if (isLocalFile) {
                     data = {
-                        "coinbase": ["4.2.2"],
-                        "metamask": ["0.30.2"],
+                        "coinbase": ["4.2.2", "4.2.3"],
+                        "metamask": ["0.30.2", "0.30.3"],
                         "walletconnect": ["1.16.1"]
                     };
                 } else {
                     const response = await fetch(`${baseUrl}/stats/version-history.json`);
                     const historyData = await response.json();
-                    // Get the latest entry and transform the data
-                    const latestEntry = historyData[0];
-                    data = Object.entries(latestEntry.versions).reduce((acc, [sdk, version]) => {
-                        acc[sdk] = [version];
-                        return acc;
+                    data = historyData.reduce((acc, entry) => {
+                        Object.entries(entry.versions).forEach(([sdk, version]) => {
+                            if (!acc[sdk]) {
+                                acc[sdk] = new Set();
+                            }
+                            acc[sdk].add(version);
+                        });
+                        return Object.fromEntries(
+                            Object.entries(acc).map(([sdk, versions]) => [sdk, [...versions]])
+                        );
                     }, {});
                 }
 
                 const container = document.getElementById('optimization-types');
+                container.innerHTML = '';
 
-                // Group by optimization type
-                const optimizationTypes = ['aggressive', 'basic', 'development', 'standard'];
-
-                optimizationTypes.forEach(type => {
+                Object.entries(data).forEach(([sdkName, versions]) => {
                     const section = document.createElement('div');
                     section.className = 'optimization-section';
                     section.innerHTML = `
-                        <h4 style="margin: 20px 0 10px">${type.charAt(0).toUpperCase() + type.slice(1)} Optimization</h4>
-                    `;
+                <h4 style="margin: 20px 0 10px">${sdkName.charAt(0).toUpperCase() + sdkName.slice(1)}</h4>
+            `;
 
-                    // Create links for each package
-                    Object.entries(data).forEach(([pkgName, versions]) => {
-                        const latestVersion = versions[0];
+                    // Sort versions using proper semantic versioning comparison
+                    const sortedVersions = [...versions].sort((a, b) => {
+                        const partsA = a.split('.').map(Number);
+                        const partsB = b.split('.').map(Number);
+                        for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
+                            const partA = partsA[i] || 0;
+                            const partB = partsB[i] || 0;
+                            if (partA !== partB) return partB - partA;
+                        }
+                        return 0;
+                    });
+
+                    // Get highest version
+                    const latestVersion = sortedVersions[0];
+
+                    // Create links for each version
+                    sortedVersions.forEach(version => {
                         const link = document.createElement('a');
-                        const relativePath = `stats/${type}/${pkgName}/${latestVersion}/stats.html`;
+                        const relativePath = `stats/standard/${sdkName}/${version}/stats.html`;
                         link.href = isLocalFile ? relativePath : `${baseUrl}/${relativePath}`;
                         link.className = 'report-link';
                         link.innerHTML = `
-                            ${pkgName} <small>(v${latestVersion})</small>
-                            <span class="timestamp">Latest</span>
-                        `;
+                    Version ${version}
+                    ${version === latestVersion ? '<span class="timestamp">Latest</span>' : ''}
+                `;
                         section.appendChild(link);
                     });
 
@@ -186,7 +204,7 @@
                     ? 'Please use a local server: <code>yarn serve</code>'
                     : 'Please check the console for details.';
                 document.getElementById('stats-reports').innerHTML = `
-                    <p>Error loading statistics. ${errorMessage}</p>`;
+            <p>Error loading statistics. ${errorMessage}</p>`;
             }
         }
 
