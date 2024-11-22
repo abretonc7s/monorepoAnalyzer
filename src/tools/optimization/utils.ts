@@ -163,3 +163,20 @@ export async function promptForOptimizationLevels(
     stdin.once("data", handleData);
   });
 }
+
+export function compareVersions(
+  oldVersions: SdkVersions,
+  newVersions: SdkVersions,
+): string[] {
+  const changedSdks: string[] = [];
+
+  Object.entries(newVersions).forEach(([sdk, newVersion]) => {
+    const oldVersion = oldVersions[sdk as keyof SdkVersions];
+
+    if (oldVersion !== newVersion) {
+      changedSdks.push(sdk);
+    }
+  });
+
+  return changedSdks;
+}

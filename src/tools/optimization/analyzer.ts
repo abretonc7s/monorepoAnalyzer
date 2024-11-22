@@ -8,13 +8,14 @@ import { brotliCompressSync, gzipSync } from "zlib";
 import { OPTIMIZATION_LEVELS, SDK_CONFIGS } from "./config";
 import { generateReport } from "./report";
 import { createConfig } from "./rollup-config";
-import { AnalyzerOptions, BundleAnalysis, HistoryEntry } from "./types";
+import { AnalyzerOptions, BundleAnalysis, HistoryEntry, SdkVersions } from "./types";
 import {
   formatBytes,
   formatDuration,
   getPackageVersions,
   promptForOptimizationLevels,
   promptUser,
+  compareVersions,
 } from "./utils";
 
 const execPromise = promisify(exec);
@@ -25,21 +26,30 @@ let history: HistoryEntry[] = [];
 
 async function handleExistingLevels(
   existingLevels: string[],
-): Promise<string[]> {
+  changedSdks: string[],
+): Promise<{ buildLevels: string[]; forceRebuild: boolean }> {
   console.log(
     `\n📦 ${chalk.blue("Found existing builds for:")} ${chalk.green(existingLevels.join(", "))}`,
   );
 
-  const rebuildAll = await promptUser({
-    question: "Would you like to rebuild any levels?",
+  if (changedSdks.length > 0) {
+    console.log(
+      chalk.yellow(`\nChanged SDKs detected: ${changedSdks.join(", ")}`),
+    );
+  }
+
+  const rebuildPrompt = await promptUser({
+    question: "Would you like to rebuild existing bundles?",
     defaultValue: "n",
   });
 
-  if (rebuildAll) {
-    return await promptForOptimizationLevels(existingLevels);
+  if (rebuildPrompt) {
+    const levels = await promptForOptimizationLevels(existingLevels);
+
+    return { buildLevels: levels, forceRebuild: true };
   }
 
-  return [];
+  return { buildLevels: [], forceRebuild: false };
 }
 
 async function loadHistory(historyPath: string): Promise<HistoryEntry[]> {
@@ -52,25 +62,34 @@ async function loadHistory(historyPath: string): Promise<HistoryEntry[]> {
 
 async function determineSelectedLevels(
   options: AnalyzerOptions,
-): Promise<{ buildLevels: string[]; analyzeLevels: string[] }> {
+  changedSdks: string[],
+): Promise<{
+  buildLevels: string[];
+  analyzeLevels: string[];
+  rebuildAll: boolean;
+}> {
   // Early returns for specific options
-  if (options.selectedLevels) {
-    return {
-      buildLevels: options.selectedLevels,
-      analyzeLevels: options.selectedLevels,
-    };
-  }
-
-  if (options.skipPrompts || options.forceRebuild) {
+  if (options.selectedLevels || options.skipPrompts || options.forceRebuild) {
     const allLevels = Object.keys(OPTIMIZATION_LEVELS);
 
     return {
-      buildLevels: allLevels,
-      analyzeLevels: allLevels,
+      buildLevels: options.selectedLevels || allLevels,
+      analyzeLevels: options.selectedLevels || allLevels,
+      rebuildAll: true,
     };
   }
 
   const allLevels = Object.keys(OPTIMIZATION_LEVELS);
+
+  // If only specific SDKs changed, we should still analyze all levels
+  // but only rebuild the changed SDKs
+  if (changedSdks.length > 0 && !options.forceRebuild) {
+    return {
+      buildLevels: allLevels,
+      analyzeLevels: allLevels,
+      rebuildAll: false,
+    };
+  }
 
   console.log("\n📂 Checking all optimization levels:", allLevels);
   console.log("📁 Current working directory:", process.cwd());
@@ -147,11 +166,15 @@ async function determineSelectedLevels(
       console.log(`  - ${level}`);
     });
 
-    const rebuildLevels = await handleExistingLevels(existingLevels);
+    const { buildLevels, forceRebuild } = await handleExistingLevels(
+      existingLevels,
+      changedSdks,
+    );
 
     return {
-      buildLevels: rebuildLevels,
+      buildLevels: buildLevels,
       analyzeLevels: existingLevels,
+      rebuildAll: forceRebuild,
     };
   }
 
@@ -159,6 +182,7 @@ async function determineSelectedLevels(
   return {
     buildLevels: allLevels,
     analyzeLevels: allLevels,
+    rebuildAll: true,
   };
 }
 
@@ -232,6 +256,14 @@ interface TimingMetrics {
   total: number;
 }
 
+const hasMatchingVersions = (entry: HistoryEntry, currentVersions: SdkVersions): boolean => {
+  return Object.entries(currentVersions).every(
+    ([pkg, version]) => 
+      entry.versions[pkg as keyof SdkVersions] === version && 
+      version !== null
+  );
+};
+
 export async function analyzeBundles(options: AnalyzerOptions): Promise<void> {
   const startTime = Date.now();
   const results: Record<string, BundleAnalysis[]> = {};
@@ -247,14 +279,25 @@ export async function analyzeBundles(options: AnalyzerOptions): Promise<void> {
 
   try {
     const versionCheckStart = Date.now();
-    const versions = getPackageVersions();
+    const currentVersions = getPackageVersions();
+
+    // Get the most recent entry from history to compare versions
+    const lastEntry = history[history.length - 1];
+    const changedSdks = lastEntry
+      ? compareVersions(lastEntry.versions, currentVersions)
+      : Object.keys(currentVersions);
+
+    console.log(
+      "\n📦 Changed SDKs:",
+      changedSdks.length ? changedSdks.join(", ") : "None",
+    );
 
     timings.versionCheck = Date.now() - versionCheckStart;
 
     console.log(
       `\n📦 Package versions detected (${formatDuration(timings.versionCheck)}):`,
     );
-    Object.entries(versions).forEach(([pkg, version]) => {
+    Object.entries(currentVersions).forEach(([pkg, version]) => {
       console.log(`  - ${pkg}: ${version}`);
     });
 
@@ -263,8 +306,8 @@ export async function analyzeBundles(options: AnalyzerOptions): Promise<void> {
     history = await loadHistory(HISTORY_PATH);
     timings.historyLoad = Date.now() - historyStart;
 
-    const { buildLevels, analyzeLevels } =
-      await determineSelectedLevels(options);
+    const { buildLevels, analyzeLevels, rebuildAll } =
+      await determineSelectedLevels(options, changedSdks);
 
     console.log("\n🔍 Debug Info:");
     console.log("  Build Levels:", buildLevels);
@@ -292,10 +335,22 @@ export async function analyzeBundles(options: AnalyzerOptions): Promise<void> {
 
       for (const sdk of SDK_CONFIGS) {
         const name = path.basename(sdk.output, ".js").toLowerCase();
-        const version = versions[name as keyof typeof versions];
+        const version = currentVersions[name as keyof typeof currentVersions];
 
         if (!version) {
           console.log(chalk.yellow(`    ⚠️  No version found for ${name}`));
+          continue;
+        }
+
+        // Skip if SDK hasn't changed and we're not doing a full rebuild
+        if (
+          !rebuildAll &&
+          !changedSdks.includes(name) &&
+          !options.forceRebuild
+        ) {
+          console.log(
+            chalk.blue(`    ℹ️  Skipping ${name} (no version change)`),
+          );
           continue;
         }
 
@@ -307,9 +362,11 @@ export async function analyzeBundles(options: AnalyzerOptions): Promise<void> {
 
         const bundlePath = path.resolve(sdkVersionDir, sdk.output);
 
-        if (!fs.existsSync(bundlePath) || buildLevels.includes(level)) {
+        if (!fs.existsSync(bundlePath)) {
           console.log(`    🔨 Building ${name} for ${level}...`);
           await buildBundle(sdk, level, version);
+        } else {
+          console.log(chalk.blue(`    ℹ️  Using existing bundle for ${name}`));
         }
       }
     }
@@ -325,7 +382,7 @@ export async function analyzeBundles(options: AnalyzerOptions): Promise<void> {
 
       for (const sdk of SDK_CONFIGS) {
         const name = path.basename(sdk.output, ".js").toLowerCase();
-        const version = versions[name as keyof typeof versions];
+        const version = currentVersions[name as keyof typeof currentVersions];
 
         if (!version) continue;
 
@@ -373,39 +430,11 @@ export async function analyzeBundles(options: AnalyzerOptions): Promise<void> {
 
     const newEntry: HistoryEntry = {
       timestamp: new Date().toISOString(),
-      versions,
+      versions: currentVersions,
       results,
     };
 
-    const hasMatchingEntry = history.some((entry) => {
-      // First check versions match
-      const versionsMatch = Object.entries(versions).every(
-        ([pkg, version]) =>
-          entry.versions[pkg as keyof typeof versions] === version,
-      );
-
-      if (!versionsMatch) return false;
-
-      // Then check if results match for each level
-      return Object.entries(results).every(([level, levelResults]) => {
-        const entryLevelResults = entry.results[level];
-
-        if (!entryLevelResults) return false;
-
-        return levelResults.every((result) => {
-          const matchingResult = entryLevelResults.find(
-            (r) => r.sdk === result.sdk,
-          );
-
-          return (
-            matchingResult &&
-            matchingResult.raw === result.raw &&
-            matchingResult.gzip === result.gzip &&
-            matchingResult.brotli === result.brotli
-          );
-        });
-      });
-    });
+    const hasMatchingEntry = history.some((entry) => hasMatchingVersions(entry, currentVersions));
 
     if (!hasMatchingEntry) {
       history.push(newEntry);
@@ -414,14 +443,14 @@ export async function analyzeBundles(options: AnalyzerOptions): Promise<void> {
       console.log(chalk.green("\n✓ Version history updated"));
     } else {
       console.log(
-        chalk.yellow("\n⚠️  Skipping history update - identical entry exists"),
+        chalk.yellow("\n⚠️  Skipping history update - versions already exist in history")
       );
     }
 
     const reportContent = generateReport({
       results,
       history,
-      versions,
+      versions: currentVersions,
       buildDuration: Date.now() - startTime,
     });
 

@@ -100,5 +100,107 @@
         }
       ]
     }
+  },
+  {
+    "timestamp": "2024-11-22T06:55:32.375Z",
+    "versions": {
+      "coinbase": "4.2.3",
+      "metamask": "0.30.3",
+      "walletconnect": "1.16.1"
+    },
+    "results": {
+      "development": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 392667,
+          "gzip": 89168,
+          "brotli": 71071
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.30.3",
+          "raw": 2333980,
+          "gzip": 580627,
+          "brotli": 460063
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 2167076,
+          "gzip": 466256,
+          "brotli": 246815
+        }
+      ],
+      "basic": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 114141,
+          "gzip": 36163,
+          "brotli": 31240
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.30.3",
+          "raw": 1106450,
+          "gzip": 330961,
+          "brotli": 260802
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 755608,
+          "gzip": 230999,
+          "brotli": 116401
+        }
+      ],
+      "standard": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 111570,
+          "gzip": 35599,
+          "brotli": 30791
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.30.3",
+          "raw": 1091104,
+          "gzip": 327088,
+          "brotli": 258214
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 747254,
+          "gzip": 229842,
+          "brotli": 115646
+        }
+      ],
+      "aggressive": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 108688,
+          "gzip": 35275,
+          "brotli": 30445
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.30.3",
+          "raw": 1062454,
+          "gzip": 323446,
+          "brotli": 255715
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 730071,
+          "gzip": 226417,
+          "brotli": 113627
+        }
+      ]
+    }
   }
 ]

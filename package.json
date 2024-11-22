@@ -9,6 +9,9 @@
     "lint": "eslint --fix .",
     "size": "size-limit",
     "build": "rollup -c",
+    "local:mmfile": "ts-node src/single/packageMonitor.ts '/Volumes/FD/Projects/metamask/metamask-sdk/packages/sdk'",
+    "local:metamask": "ts-node src/single/packageMonitor.ts '@metamask/sdk'",
+    "local:coinbase": "ts-node src/single/packageMonitor.ts '@coinbase/wallet-sdk'",
     "analyze-all": "ts-node src/tools/optimization/cli.ts analyze",
     "clean": "rm -rf dist stats optimization-report.html",
     "predeploy": "yarn analyze-all",
@@ -17,8 +20,8 @@
     "preview": "yarn analyze-all && serve ."
   },
   "dependencies": {
-    "@coinbase/wallet-sdk": "^4.2.2",
-    "@metamask/sdk": "^0.30.2",
+    "@coinbase/wallet-sdk": "^4.2.3",
+    "@metamask/sdk": "^0.30.3",
     "@types/node": "^22.7.9",
     "@walletconnect/web3wallet": "^1.16.1",
     "chalk": "^4.1.2",
