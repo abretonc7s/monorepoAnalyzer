@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@coinbase/wallet-sdk": "^4.2.3",
-    "@metamask/sdk": "^0.30.3",
+    "@metamask/sdk": "^0.31.0",
     "@types/node": "^22.7.9",
     "@walletconnect/web3wallet": "^1.16.1",
     "chalk": "^4.1.2",
