@@ -1,0 +1,512 @@
+[
+  {
+    "timestamp": "2024-11-12T06:27:04.178Z",
+    "versions": {
+      "coinbase": "4.2.2",
+      "metamask": "0.30.2",
+      "walletconnect": "1.16.1"
+    },
+    "results": {
+      "development": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.2",
+          "raw": 392667,
+          "gzip": 89168,
+          "brotli": 71066
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.30.2",
+          "raw": 2543312,
+          "gzip": 673505,
+          "brotli": 473252
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 2167076,
+          "gzip": 466256,
+          "brotli": 246815
+        }
+      ],
+      "basic": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.2",
+          "raw": 114141,
+          "gzip": 36163,
+          "brotli": 31267
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.30.2",
+          "raw": 1539116,
+          "gzip": 463650,
+          "brotli": 305252
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 755608,
+          "gzip": 230999,
+          "brotli": 116401
+        }
+      ],
+      "standard": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.2",
+          "raw": 111570,
+          "gzip": 35599,
+          "brotli": 30794
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.30.2",
+          "raw": 1522071,
+          "gzip": 459929,
+          "brotli": 302084
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 747254,
+          "gzip": 229842,
+          "brotli": 115646
+        }
+      ],
+      "aggressive": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.2",
+          "raw": 108688,
+          "gzip": 35274,
+          "brotli": 30478
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.30.2",
+          "raw": 1484644,
+          "gzip": 456156,
+          "brotli": 299638
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 730071,
+          "gzip": 226417,
+          "brotli": 113627
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2024-11-22T06:55:32.375Z",
+    "versions": {
+      "coinbase": "4.2.3",
+      "metamask": "0.30.3",
+      "walletconnect": "1.16.1"
+    },
+    "results": {
+      "development": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 392667,
+          "gzip": 89168,
+          "brotli": 71071
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.30.3",
+          "raw": 2333980,
+          "gzip": 580627,
+          "brotli": 460063
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 2167076,
+          "gzip": 466256,
+          "brotli": 246815
+        }
+      ],
+      "basic": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 114141,
+          "gzip": 36163,
+          "brotli": 31240
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.30.3",
+          "raw": 1106450,
+          "gzip": 330961,
+          "brotli": 260802
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 755608,
+          "gzip": 230999,
+          "brotli": 116401
+        }
+      ],
+      "standard": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 111570,
+          "gzip": 35599,
+          "brotli": 30791
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.30.3",
+          "raw": 1091104,
+          "gzip": 327088,
+          "brotli": 258214
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 747254,
+          "gzip": 229842,
+          "brotli": 115646
+        }
+      ],
+      "aggressive": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 108688,
+          "gzip": 35275,
+          "brotli": 30445
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.30.3",
+          "raw": 1062454,
+          "gzip": 323446,
+          "brotli": 255715
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 730071,
+          "gzip": 226417,
+          "brotli": 113627
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2024-11-27T00:52:24.289Z",
+    "versions": {
+      "coinbase": "4.2.3",
+      "metamask": "0.31.0",
+      "walletconnect": "1.16.1"
+    },
+    "results": {
+      "development": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 392667,
+          "gzip": 89168,
+          "brotli": 71071
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.31.0",
+          "raw": 1084813,
+          "gzip": 291728,
+          "brotli": 235710
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 2167076,
+          "gzip": 466256,
+          "brotli": 246815
+        }
+      ],
+      "basic": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 114141,
+          "gzip": 36163,
+          "brotli": 31240
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.31.0",
+          "raw": 709788,
+          "gzip": 211115,
+          "brotli": 171484
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 755608,
+          "gzip": 230999,
+          "brotli": 116401
+        }
+      ],
+      "standard": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 111570,
+          "gzip": 35599,
+          "brotli": 30791
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.31.0",
+          "raw": 697584,
+          "gzip": 208180,
+          "brotli": 169432
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 747254,
+          "gzip": 229842,
+          "brotli": 115646
+        }
+      ],
+      "aggressive": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 108688,
+          "gzip": 35275,
+          "brotli": 30445
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.31.0",
+          "raw": 678559,
+          "gzip": 206065,
+          "brotli": 168072
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 730071,
+          "gzip": 226417,
+          "brotli": 113627
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2024-12-02T08:37:16.517Z",
+    "versions": {
+      "coinbase": "4.2.3",
+      "metamask": "0.31.1",
+      "walletconnect": "1.16.1"
+    },
+    "results": {
+      "development": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 392667,
+          "gzip": 89168,
+          "brotli": 71071
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.31.1",
+          "raw": 965745,
+          "gzip": 254088,
+          "brotli": 205842
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 2167076,
+          "gzip": 466256,
+          "brotli": 246815
+        }
+      ],
+      "basic": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 114141,
+          "gzip": 36163,
+          "brotli": 31240
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.31.1",
+          "raw": 578681,
+          "gzip": 170167,
+          "brotli": 141177
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 755608,
+          "gzip": 230999,
+          "brotli": 116401
+        }
+      ],
+      "standard": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 111570,
+          "gzip": 35599,
+          "brotli": 30791
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.31.1",
+          "raw": 565644,
+          "gzip": 167246,
+          "brotli": 139015
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 747254,
+          "gzip": 229842,
+          "brotli": 115646
+        }
+      ],
+      "aggressive": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.3",
+          "raw": 108688,
+          "gzip": 35275,
+          "brotli": 30445
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.31.1",
+          "raw": 550634,
+          "gzip": 165771,
+          "brotli": 138059
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 730071,
+          "gzip": 226417,
+          "brotli": 113627
+        }
+      ]
+    }
+  },
+  {
+    "timestamp": "2024-12-16T08:26:57.363Z",
+    "versions": {
+      "coinbase": "4.2.4",
+      "metamask": "0.31.2",
+      "walletconnect": "1.16.1"
+    },
+    "results": {
+      "development": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.4",
+          "raw": 392708,
+          "gzip": 89177,
+          "brotli": 71041
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.31.2",
+          "raw": 964957,
+          "gzip": 253918,
+          "brotli": 205913
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 2167076,
+          "gzip": 466256,
+          "brotli": 246815
+        }
+      ],
+      "basic": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.4",
+          "raw": 114164,
+          "gzip": 36170,
+          "brotli": 31327
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.31.2",
+          "raw": 578453,
+          "gzip": 170052,
+          "brotli": 141049
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 755608,
+          "gzip": 230999,
+          "brotli": 116401
+        }
+      ],
+      "standard": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.4",
+          "raw": 111593,
+          "gzip": 35606,
+          "brotli": 30791
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.31.2",
+          "raw": 565409,
+          "gzip": 167132,
+          "brotli": 138928
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 747254,
+          "gzip": 229842,
+          "brotli": 115646
+        }
+      ],
+      "aggressive": [
+        {
+          "sdk": "coinbase",
+          "version": "4.2.4",
+          "raw": 108711,
+          "gzip": 35282,
+          "brotli": 30478
+        },
+        {
+          "sdk": "metamask",
+          "version": "0.31.2",
+          "raw": 550396,
+          "gzip": 165665,
+          "brotli": 137965
+        },
+        {
+          "sdk": "walletconnect",
+          "version": "1.16.1",
+          "raw": 730071,
+          "gzip": 226417,
+          "brotli": 113627
+        }
+      ]
+    }
+  }
+]
