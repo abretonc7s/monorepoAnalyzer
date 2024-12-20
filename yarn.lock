@@ -1697,9 +1697,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/sdk@npm:^0.31.2":
-  version: 0.31.2
-  resolution: "@metamask/sdk@npm:0.31.2"
+"@metamask/sdk@npm:^0.31.4":
+  version: 0.31.4
+  resolution: "@metamask/sdk@npm:0.31.4"
   dependencies:
     "@babel/runtime": "npm:^7.26.0"
     "@metamask/onboarding": "npm:^1.0.1"
@@ -1720,7 +1720,7 @@ __metadata:
     tslib: "npm:^2.6.0"
     util: "npm:^0.12.4"
     uuid: "npm:^8.3.2"
-  checksum: 10c0/7cb342d0157c9078be53bfa4fcd951c0158ff400f551f916e13e4168ca79fddb12e60fa9f5346860f322437b6c9629b575aa70cf68b845974fa2f64bd0b59172
+  checksum: 10c0/cca824079c80124feffe68f25b1e76cb6cc638f3253790782558c6f8831110fc33d4d255309c0eebcbfdfafb36c93416fe9350cb395d383392f3935c85f15d66
   languageName: node
   linkType: hard
 
@@ -7050,7 +7050,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.24.0"
     "@coinbase/wallet-sdk": "npm:^4.2.4"
     "@eslint/js": "npm:^9.13.0"
-    "@metamask/sdk": "npm:^0.31.2"
+    "@metamask/sdk": "npm:^0.31.4"
     "@rollup/plugin-babel": "npm:^6.0.0"
     "@rollup/plugin-commonjs": "npm:^25.0.0"
     "@rollup/plugin-json": "npm:^6.1.0"
